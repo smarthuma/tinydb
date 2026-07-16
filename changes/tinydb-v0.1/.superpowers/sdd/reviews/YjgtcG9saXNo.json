@@ -1,9 +1,0 @@
-{
-  "status": "pass",
-  "base": "8b46743b68995b89466e71f2ec285caae2944371",
-  "head": "61dce2fce500fc5993c84dc5afc82e7fe6e56083",
-  "report": ".superpowers/sdd/reviews/b8-polish.md",
-  "plan_hash": "sha256:29238c870150c23bd00706ab07a46735d4ee80fedac80ec9f03ecfa33a46eaad",
-  "plan_revision": 1,
-  "recorded_at": "2026-07-16T13:53:53.180Z"
-}

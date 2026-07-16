@@ -14,7 +14,7 @@
     "facts": {
       "workflow": "full",
       "documented_task_count": 6,
-      "planned_task_count": 52,
+      "planned_task_count": 49,
       "planned_wave_count": 9,
       "has_parallel_wave": false,
       "inline_threshold": 3
@@ -103,10 +103,7 @@
       "tasks": [
         "T-6.1",
         "T-6.2",
-        "T-6.3",
-        "T-6.4",
-        "T-6.5",
-        "T-6.6"
+        "T-6.3"
       ],
       "depends_on": [
         "b2-storage",
@@ -171,10 +168,10 @@
       ]
     }
   ],
-  "artifacts_hash": "sha256:79f223745864f6322dee7490745471fdb61804b2543aa0463e1789a892d881f1",
+  "artifacts_hash": "sha256:d87b23d8033a7e7185a2ac97455e3913316cecf2bc34a07f70d726661161dcc1",
   "contract_hash": "sha256:b544af32762d653025c9f516aa4536d9be3dd0e1128e3ede56d0be7cb29d2203",
   "workflow": "full",
-  "execution_plan_revision_at_recommendation": null,
-  "created_at": "2026-07-16T10:00:04.539Z",
-  "hash": "sha256:6ec3eece039f1bb6143873d855e534653b2b2781dad1bebfd3842a8e18068972"
+  "execution_plan_revision_at_recommendation": 1,
+  "created_at": "2026-07-16T14:09:55.404Z",
+  "hash": "sha256:c00d22afb3341631ece31d3274410a31f3d6b2f2e7443e7fc556de694958f8a2"
 }

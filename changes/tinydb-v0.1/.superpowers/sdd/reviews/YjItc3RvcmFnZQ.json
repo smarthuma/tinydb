@@ -1,9 +1,0 @@
-{
-  "status": "pass",
-  "base": "2b59101a42ae9dcaefe8d60af6bd640245a400cc",
-  "head": "8ddd2f541a255417cabf3caf719c07a9a90612e5",
-  "report": ".superpowers/sdd/reviews/b2-storage.md",
-  "plan_hash": "sha256:29238c870150c23bd00706ab07a46735d4ee80fedac80ec9f03ecfa33a46eaad",
-  "plan_revision": 1,
-  "recorded_at": "2026-07-16T12:57:30.838Z"
-}

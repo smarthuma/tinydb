@@ -1,9 +1,0 @@
-{
-  "status": "pass",
-  "base": "61b865fadbae94917a7b5e91aebda47ffca53c2c",
-  "head": "ce89c1da1a4353d0d299e15f4dfc79c1311724ef",
-  "report": ".superpowers/sdd/reviews/b4-btree.md",
-  "plan_hash": "sha256:29238c870150c23bd00706ab07a46735d4ee80fedac80ec9f03ecfa33a46eaad",
-  "plan_revision": 1,
-  "recorded_at": "2026-07-16T13:10:15.744Z"
-}

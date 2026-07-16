@@ -4,7 +4,7 @@
 # === Core state ===
 state: executing
 workflow: full
-revision: 1
+revision: 2
 
 # === Hashes (fast staleness detection) ===
 artifacts_hash: sha256:79f223745864f6322dee7490745471fdb61804b2543aa0463e1789a892d881f1
@@ -12,11 +12,11 @@ contract_hash: sha256:b544af32762d653025c9f516aa4536d9be3dd0e1128e3ede56d0be7cb2
 
 # === Execution progress ===
 execution_mode: sdd
-execution_plan_hash: sha256:29238c870150c23bd00706ab07a46735d4ee80fedac80ec9f03ecfa33a46eaad
-execution_plan_revision: 1
+execution_plan_hash: sha256:c373a08d19b8916b256f00fed3c908a00d71faf69429caa399c4e671ee18108c
+execution_plan_revision: 2
 batches_completed: 9
 test_result: pass
-spec_merged: false
+spec_merged: true
 
 # === Metadata ===
 change_name: tinydb-v0.1
@@ -35,8 +35,8 @@ dp_2_result: "auto-approved: all 4 artifact classes passed (proposal.md + 7 spec
 dp_2_timestamp: "2026-07-16T09:45:00Z"
 dp_3_result: "approved: 7 capabilities × 49 REQ (≥90 scenarios) / 9 serial waves (b1..b9) / 5 boundary categories / 4 regression-sensitive areas / 8 design decisions; Execution Mode left Pending DP-4 by design"
 dp_3_timestamp: "2026-07-16T10:00:00Z"
-dp_4_result: sdd: plan revision 1; user-confirmed; user-selected SDD per team feedback: last round missed DP-5/DP-6 because batch-inline left no per-wave review receipt; this round enforces explicit review receipts per wave (DP-0 hard constraint: git + 7 DP decision points traced)
-dp_4_timestamp: 2026-07-16T10:01:28.245Z
+dp_4_result: sdd: plan revision 2; user-confirmed-revision; recommit plan revision 2 after artifacts settled for closing transition
+dp_4_timestamp: 2026-07-16T14:10:09.031Z
 dp_5_result: null
 dp_5_timestamp: null
 dp_6_result: null

@@ -1,9 +1,0 @@
-{
-  "status": "pass",
-  "base": "3d35ef118d45a93b9cb14917adc60cb5aba07439",
-  "head": "bcab7a5fda40c5a4ecfdc44ed7e1698346d0afe6",
-  "report": ".superpowers/sdd/reviews/b3-parser.md",
-  "plan_hash": "sha256:29238c870150c23bd00706ab07a46735d4ee80fedac80ec9f03ecfa33a46eaad",
-  "plan_revision": 1,
-  "recorded_at": "2026-07-16T13:04:41.856Z"
-}
