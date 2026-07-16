@@ -1,0 +1,9 @@
+{
+  "status": "pass",
+  "base": "670343cc6dc999687a125cedf6d7c751c91ca3c0",
+  "head": "670343cc6dc999687a125cedf6d7c751c91ca3c0",
+  "report": ".superpowers/sdd/reviews/b9-release.md",
+  "plan_hash": "sha256:c373a08d19b8916b256f00fed3c908a00d71faf69429caa399c4e671ee18108c",
+  "plan_revision": 2,
+  "recorded_at": "2026-07-16T14:11:43.463Z"
+}
