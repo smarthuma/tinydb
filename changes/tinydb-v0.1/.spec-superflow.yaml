@@ -2,7 +2,7 @@
 # Derived data. Always rebuildable from artifacts. Lost/corrupt → fall back to content-level detection.
 
 # === Core state ===
-state: executing
+state: closing
 workflow: full
 revision: 2
 
@@ -20,9 +20,9 @@ spec_merged: true
 
 # === Metadata ===
 change_name: tinydb-v0.1
-last_transition: 2026-07-16T10:02:04.744Z
-last_transition_from: approved-for-build
-last_transition_to: executing
+last_transition: 2026-07-16T14:11:50.436Z
+last_transition_from: executing
+last_transition_to: closing
 
 # === Decision points ===
 dp_0_decisions: "change=changes/tinydb-v0.1; intent=从零构建 Python 嵌入式关系型数据库 tinydb (SQL 解析 + 页式存储 + B+ Tree 索引 + WAL 事务 + CLI/REPL); scope=严格 stay focused, 不做 JOIN/并发/外键/视图/触发器/网络/C-S; constraints=Python 3.10+, 零外部运行时依赖, 单 .db 文件, WAL 日志, B+ Tree 索引, pytest 覆盖率 >= 80% (含 CLI REPL E2E), git 统一管理, 7 个 DP 决策点全留痕; comms=混合 (关键决策点问 / 中间流程自动); related_optimizations=stay_focused (上一轮团队已验证完整 SPEC 流水线, v0.1 不引入网络层/客户端); source_proposal=tinydb-proposal.md (Scope.In 一致)"
@@ -39,7 +39,7 @@ dp_4_result: sdd: plan revision 2; user-confirmed-revision; recommit plan revisi
 dp_4_timestamp: 2026-07-16T14:10:09.031Z
 dp_5_result: null
 dp_5_timestamp: null
-dp_6_result: null
+dp_6_result: Release gate passed: 4 acceptance checks all green (pytest 171/171 PASS, coverage 81.80% >= 80% gate, scope audit no violations vs proposal Out list, 0 external runtime deps). Routing to DP-7 archive.
 dp_6_timestamp: null
 dp_7_result: null
 dp_7_timestamp: null
