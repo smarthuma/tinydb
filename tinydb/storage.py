@@ -151,8 +151,12 @@ class FileStore:
         return cls(path, stored_page_size, _pre_existing=True)
 
     def close(self) -> None:
-        os.close(self._fd)
-        self._fd = -1
+        if self._fd != -1:
+            try:
+                os.close(self._fd)
+            except OSError:
+                pass
+            self._fd = -1
 
     def __enter__(self) -> "FileStore":
         return self

@@ -92,6 +92,21 @@ class TableNotFound(TinyDBError):
         self.name = name
 
 
+class TransactionAlreadyActive(TinyDBError):
+    """A transaction is already in progress on this database."""
+
+    def __init__(self) -> None:
+        super().__init__("TransactionAlreadyActive: only one transaction per database")
+
+
+class TransactionLogCorrupt(TinyDBError):
+    """WAL record checksum mismatch."""
+
+    def __init__(self, lsn: int) -> None:
+        super().__init__(f"TransactionLogCorrupt(lsn={lsn})")
+        self.lsn = lsn
+
+
 # === INT codec (REQ-TS-001) ================================================
 
 _INT_MIN = -(2**63)
