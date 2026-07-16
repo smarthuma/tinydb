@@ -8,9 +8,9 @@
 | b4-btree | T-4.1..T-4.6 | ✅ complete (6/6) | pass | `61b865f..ce89c1d` | 10 btree tests / 115 total / split-at-boundary bug fixed / merge + TEXT test deferred v0.2 |
 | b5-executor | T-5.1..T-5.9 | ✅ complete (9/9) | pass | `f791568..0dff372` | 13 executor tests / 140 total / 5 TDD bugs caught (ljust, NUL strip, TEXT double-decode, off-by-one, missing COUNT/SUM/AVG keywords) / index-aware execution deferred v0.2 |
 | b6-tx | T-6.1..T-6.6 | ✅ complete (3/6) | pass | `5268fea..5c10590` | 9 wal+tx tests / 149 total / WAL codec+state machine done / T-6.4..6.6 deferred (executor hook, recovery wiring, CHECKPOINT) |
-| b7-cli | T-7.1..T-7.6 | ⏳ eligible | — | — | depends on b3, b5, b6 — now all done |
-| b8-polish | T-8.1..T-8.5 | 🔒 blocked | — | — | depends on all prior |
-| b9-release | T-9.1..T-9.4 | 🔒 blocked | — | — | depends on all prior |
+| b7-cli | T-7.1..T-7.6 | ✅ complete (6/6) | pass | `6cca850..07b3cb4` | 13 e2e tests / 162 total / full REPL functional (CREATE→INSERT→SELECT→BEGIN→COMMIT→reopen→SELECT); REQ-CR-005 multi-line smoke-tested only |
+| b8-polish | T-8.1..T-8.5 | ⏳ eligible | — | — | depends on all prior — now all done |
+| b9-release | T-9.1..T-9.4 | 🔒 blocked | — | — | depends on all prior (incl b8) |
 | b6-tx | T-6.1..T-6.6 | 🔒 blocked | — | — | depends on b2, b5 |
 | b7-cli | T-7.1..T-7.6 | 🔒 blocked | — | — | depends on b3, b5, b6 |
 | b8-polish | T-8.1..T-8.5 | 🔒 blocked | — | — | depends on all prior |
