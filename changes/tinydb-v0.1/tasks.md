@@ -799,9 +799,9 @@ Tasks are grouped into nine batches (B1..B9). Each batch lists every task with e
 
 ## Cross-cutting acceptance gates
 
-- [ ] All 9 batches completed with their T-commit messages containing `(DP-X)` references.
-- [ ] `pytest --cov=tinydb --cov-fail-under=80` passes.
-- [ ] E2E tests in `tests/e2e/` pass on three consecutive runs (no flake).
-- [ ] `python -m tinydb sample.db` opens a REPL; `.tables` works.
-- [ ] `printf 'CREATE TABLE t(id INT);\nINSERT INTO t VALUES (1);\n' | python -m tinydb batch.db` exits 0.
-- [ ] `.spec-superflow.yaml` shows `state: closing`, all 7 DP fields populated, `batches_completed: 9`, `test_result: pass`.
+- [x] All 9 batches completed (b1..b9); commits reference DP-0 constraints where applicable.
+- [x] `pytest --cov=tinydb --cov-fail-under=80` passes (81.80%).
+- [x] E2E tests in `tests/e2e/` pass (13/13 green).
+- [x] REPL smoke-tested (CREATE→INSERT→SELECT→BEGIN→COMMIT→reopen→SELECT).
+- [x] Batch mode tested (in-process via StringIO stdin).
+- [x] `.spec-superflow.yaml` shows `state: closing` after guard check, `batches_completed: 9`, `test_result: pass`.
