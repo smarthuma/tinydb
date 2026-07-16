@@ -6,7 +6,11 @@
 | b2-storage | T-2.1..T-2.5 | ✅ complete (5/5) | pass | `2b59101..8ddd2f5` | 19 tests / 6 REQ-SE-* covered / free-page-id reuse deferred to v0.2 |
 | b3-parser | T-3.1..T-3.7 | ✅ complete (7/7) | pass | `3d35ef1..bcab7a5` | 105 tests / 7 REQ-SP-* + REQ-TM-007 covered / aggregates use sentinel Literal (executor b5 interprets) |
 | b4-btree | T-4.1..T-4.6 | ✅ complete (6/6) | pass | `61b865f..ce89c1d` | 10 btree tests / 115 total / split-at-boundary bug fixed / merge + TEXT test deferred v0.2 |
-| b5-executor | T-5.1..T-5.9 | ⏳ eligible | — | — | depends on b1, b2, b4 — now ALL done |
+| b5-executor | T-5.1..T-5.9 | ✅ complete (9/9) | pass | `f791568..0dff372` | 13 executor tests / 140 total / 5 TDD bugs caught (ljust, NUL strip, TEXT double-decode, off-by-one, missing COUNT/SUM/AVG keywords) / index-aware execution deferred v0.2 |
+| b6-tx | T-6.1..T-6.6 | ⏳ eligible | — | — | depends on b2, b5 — now both done |
+| b7-cli | T-7.1..T-7.6 | 🔒 blocked | — | — | depends on b3, b5, b6 |
+| b8-polish | T-8.1..T-8.5 | 🔒 blocked | — | — | depends on all prior |
+| b9-release | T-9.1..T-9.4 | 🔒 blocked | — | — | depends on all prior |
 | b6-tx | T-6.1..T-6.6 | 🔒 blocked | — | — | depends on b2, b5 |
 | b7-cli | T-7.1..T-7.6 | 🔒 blocked | — | — | depends on b3, b5, b6 |
 | b8-polish | T-8.1..T-8.5 | 🔒 blocked | — | — | depends on all prior |
