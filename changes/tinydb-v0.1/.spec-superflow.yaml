@@ -7,7 +7,7 @@ workflow: full
 revision: 2
 
 # === Hashes (fast staleness detection) ===
-artifacts_hash: sha256:79f223745864f6322dee7490745471fdb61804b2543aa0463e1789a892d881f1
+artifacts_hash: sha256:d87b23d8033a7e7185a2ac97455e3913316cecf2bc34a07f70d726661161dcc1
 contract_hash: sha256:b544af32762d653025c9f516aa4536d9be3dd0e1128e3ede56d0be7cb29d2203
 
 # === Execution progress ===
@@ -41,5 +41,5 @@ dp_5_result: null
 dp_5_timestamp: null
 dp_6_result: Release gate passed: 4 acceptance checks all green (pytest 171/171 PASS, coverage 81.80% >= 80% gate, scope audit no violations vs proposal Out list, 0 external runtime deps). Routing to DP-7 archive.
 dp_6_timestamp: null
-dp_7_result: null
+dp_7_result: confirmed: change archived. 9/9 batches closed (b1..b9). 171/171 tests pass. coverage 81.80% (>=80% gate). 0 external runtime deps. scope audit no-violations (JOIN/concurrency/CS/deps all absent from code). artifacts: proposal + design(8 decisions) + specs(7 files/52 REQ) + tasks(9 batches) + execution-contract + README + docs/architecture. merged to master via worktree. no delta specs remain (all merged). tinydb v0.1.0 released (git tag). git log: 40+ commits tracing each task.
 dp_7_timestamp: null
