@@ -1,0 +1,9 @@
+{
+  "status": "pass",
+  "base": "6cca85054d1f0f6172e49a713a3e5ef85fa4afd9",
+  "head": "07b3cb401543aaa15eafef46e472f6b9ede411cc",
+  "report": ".superpowers/sdd/reviews/b7-cli.md",
+  "plan_hash": "sha256:29238c870150c23bd00706ab07a46735d4ee80fedac80ec9f03ecfa33a46eaad",
+  "plan_revision": 1,
+  "recorded_at": "2026-07-16T13:51:21.930Z"
+}

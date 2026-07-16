@@ -1,0 +1,9 @@
+{
+  "status": "pass",
+  "base": "5268fea916f38fe9c444eddd56668955c1ec1d8e",
+  "head": "5c10590bf2193b71f4d19c2b9ba38b3b0046d125",
+  "report": ".superpowers/sdd/reviews/b6-tx.md",
+  "plan_hash": "sha256:29238c870150c23bd00706ab07a46735d4ee80fedac80ec9f03ecfa33a46eaad",
+  "plan_revision": 1,
+  "recorded_at": "2026-07-16T13:40:23.207Z"
+}

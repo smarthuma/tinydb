@@ -1,0 +1,9 @@
+{
+  "status": "pass",
+  "base": "f791568360f524640684eb9cdc600ffc6c1cfcef",
+  "head": "0dff372ec088351498705188404a480dc61d7ca9",
+  "report": ".superpowers/sdd/reviews/b5-executor.md",
+  "plan_hash": "sha256:29238c870150c23bd00706ab07a46735d4ee80fedac80ec9f03ecfa33a46eaad",
+  "plan_revision": 1,
+  "recorded_at": "2026-07-16T13:33:32.401Z"
+}
