@@ -202,3 +202,74 @@ def decode(raw: bytes, column_type: ColumnType) -> object:
     except KeyError as e:
         raise ValueError(f"unknown column_type {column_type!r}") from e
     return codec(raw)
+
+
+# === Coercion (REQ-TS-006) =================================================
+
+
+def coerce_in(value: object, column_type: ColumnType, column_name: str) -> object:
+    """Coerce `value` to a Python type acceptable by `column_type`'s encoder.
+
+    Raises TypeMismatch on rejection; IntegerOverflow on out-of-range int;
+    bool → int (False → 0, True → 1) per REQ-TS-006.
+    """
+    if value is None:
+        return None  # NULL handled by encode_with_null, not by codec
+
+    if column_type is ColumnType.INT:
+        # bool is a subclass of int; we explicitly accept it and coerce
+        if isinstance(value, bool):
+            return 1 if value else 0
+        if not isinstance(value, int):
+            raise TypeMismatch(column_name, "INT", type(value).__name__)
+        # bounds check via encode_int which raises IntegerOverflow
+        encode_int(value)
+        return value
+
+    if column_type is ColumnType.FLOAT:
+        # REQ-TS-006: strict — Python int is NOT implicitly a FLOAT
+        if not isinstance(value, float):
+            raise TypeMismatch(column_name, "FLOAT", type(value).__name__)
+        return value
+
+    if column_type is ColumnType.TEXT:
+        if not isinstance(value, str):
+            raise TypeMismatch(column_name, "TEXT", type(value).__name__)
+        return value
+
+    if column_type is ColumnType.BOOL:
+        if not isinstance(value, bool):
+            raise TypeMismatch(column_name, "BOOL", type(value).__name__)
+        return value
+
+    raise ValueError(f"unknown column_type {column_type!r}")
+
+
+# === NULL handling (REQ-TS-005) ============================================
+
+_NULL_MARKER = b"\x00"
+
+
+def encode_none() -> bytes:
+    """Return the on-disk NULL marker."""
+    return _NULL_MARKER
+
+
+def is_null(raw: bytes) -> bool:
+    """True iff `raw` is the NULL marker."""
+    return raw == _NULL_MARKER
+
+
+def encode_with_null(value: object, column_type: ColumnType) -> tuple[bytes, bool]:
+    """Encode `value` (possibly None) for `column_type`, returning (bytes, is_null)."""
+    if value is None:
+        return _NULL_MARKER, True
+    coerced = coerce_in(value, column_type, column_name="?")
+    return encode(coerced, column_type), False
+
+
+def decode_with_null(raw: bytes, was_null: bool, column_type: ColumnType) -> object:
+    """Decode the result of encode_with_null back to a Python value (or None)."""
+    if was_null:
+        return None
+    return decode(raw, column_type)
