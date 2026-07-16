@@ -2,27 +2,27 @@
 # Derived data. Always rebuildable from artifacts. Lost/corrupt → fall back to content-level detection.
 
 # === Core state ===
-state: approved-for-build
+state: executing
 workflow: full
-revision: null
+revision: 1
 
 # === Hashes (fast staleness detection) ===
 artifacts_hash: sha256:79f223745864f6322dee7490745471fdb61804b2543aa0463e1789a892d881f1
 contract_hash: sha256:b544af32762d653025c9f516aa4536d9be3dd0e1128e3ede56d0be7cb29d2203
 
 # === Execution progress ===
-execution_mode: null
-execution_plan_hash: null
-execution_plan_revision: null
-batches_completed: 0
+execution_mode: sdd
+execution_plan_hash: sha256:29238c870150c23bd00706ab07a46735d4ee80fedac80ec9f03ecfa33a46eaad
+execution_plan_revision: 1
+batches_completed: 1
 test_result: null
 spec_merged: false
 
 # === Metadata ===
 change_name: tinydb-v0.1
-last_transition: 2026-07-16T09:58:22.917Z
-last_transition_from: bridging
-last_transition_to: approved-for-build
+last_transition: 2026-07-16T10:02:04.744Z
+last_transition_from: approved-for-build
+last_transition_to: executing
 
 # === Decision points ===
 dp_0_decisions: "change=changes/tinydb-v0.1; intent=从零构建 Python 嵌入式关系型数据库 tinydb (SQL 解析 + 页式存储 + B+ Tree 索引 + WAL 事务 + CLI/REPL); scope=严格 stay focused, 不做 JOIN/并发/外键/视图/触发器/网络/C-S; constraints=Python 3.10+, 零外部运行时依赖, 单 .db 文件, WAL 日志, B+ Tree 索引, pytest 覆盖率 >= 80% (含 CLI REPL E2E), git 统一管理, 7 个 DP 决策点全留痕; comms=混合 (关键决策点问 / 中间流程自动); related_optimizations=stay_focused (上一轮团队已验证完整 SPEC 流水线, v0.1 不引入网络层/客户端); source_proposal=tinydb-proposal.md (Scope.In 一致)"
@@ -35,8 +35,8 @@ dp_2_result: "auto-approved: all 4 artifact classes passed (proposal.md + 7 spec
 dp_2_timestamp: "2026-07-16T09:45:00Z"
 dp_3_result: "approved: 7 capabilities × 49 REQ (≥90 scenarios) / 9 serial waves (b1..b9) / 5 boundary categories / 4 regression-sensitive areas / 8 design decisions; Execution Mode left Pending DP-4 by design"
 dp_3_timestamp: "2026-07-16T10:00:00Z"
-dp_4_result: null
-dp_4_timestamp: null
+dp_4_result: sdd: plan revision 1; user-confirmed; user-selected SDD per team feedback: last round missed DP-5/DP-6 because batch-inline left no per-wave review receipt; this round enforces explicit review receipts per wave (DP-0 hard constraint: git + 7 DP decision points traced)
+dp_4_timestamp: 2026-07-16T10:01:28.245Z
 dp_5_result: null
 dp_5_timestamp: null
 dp_6_result: null
