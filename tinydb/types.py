@@ -74,6 +74,24 @@ class UniqueViolation(TinyDBError):
         self.key = key
 
 
+class UnsafeDeleteWithoutWhere(TinyDBError):
+    """DELETE without WHERE clause — refuse to delete all rows."""
+
+    def __init__(self) -> None:
+        super().__init__(
+            "UnsafeDeleteWithoutWhere: DELETE without WHERE is not allowed; "
+            "use DELETE FROM t WHERE <predicate>"
+        )
+
+
+class TableNotFound(TinyDBError):
+    """Referenced table does not exist in the catalog."""
+
+    def __init__(self, name: str) -> None:
+        super().__init__(f"TableNotFound(name={name!r})")
+        self.name = name
+
+
 # === INT codec (REQ-TS-001) ================================================
 
 _INT_MIN = -(2**63)

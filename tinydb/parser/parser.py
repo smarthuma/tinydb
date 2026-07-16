@@ -230,10 +230,13 @@ class _Parser:
             self.expect_punct("(")
             if self.match_operator("*"):
                 self.expect_punct(")")
-                return Literal(value=f"{agg}(*)")  # sentinel; executor handles
+                return Literal(value=f"{agg}:*")
             inner = self._parse_expr()
             self.expect_punct(")")
-            return Literal(value=f"{agg}({inner!r})")  # placeholder, simplified
+            # Sentinel: "{agg}:{column_name}" — executor extracts via split(':', 1)
+            from tinydb.parser.ast import ColumnRef
+            col_name = inner.name if isinstance(inner, ColumnRef) else "?"
+            return Literal(value=f"{agg}:{col_name}")
         return self._parse_expr()
 
     def _parse_order_item(self) -> OrderByItem:

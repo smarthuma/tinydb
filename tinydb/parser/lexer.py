@@ -35,6 +35,7 @@ KEYWORDS = frozenset({
     "NULL", "UNIQUE", "AND", "OR", "IS", "BETWEEN", "IN", "AS", "INT",
     "FLOAT", "TEXT", "BOOL", "BEGIN", "TRANSACTION", "COMMIT", "END",
     "ROLLBACK", "TRUE", "FALSE", "CHECKPOINT",
+    "COUNT", "SUM", "AVG", "STAR", "LIKE",
 })
 
 # Single-character punctuation
