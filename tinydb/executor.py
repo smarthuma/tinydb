@@ -397,6 +397,13 @@ class Executor:
         schema = self.catalog.get_schema(stmt.table)
         if schema is None:
             raise tinydb_types.TableNotFound(stmt.table)
+        # Expand SELECT * into explicit column list
+        if any(isinstance(c, p.ColumnRef) and c.name == "*" for c in stmt.columns):
+            stmt = p.Select(
+                columns=tuple(p.ColumnRef(col.name) for col in schema.columns),
+                table=stmt.table, where=stmt.where, order_by=stmt.order_by,
+                limit=stmt.limit, offset=stmt.offset, group_by=stmt.group_by,
+            )
         rows = _Heap(self._store, schema).scan()
         # Apply WHERE
         if stmt.where is not None:
