@@ -93,13 +93,14 @@ def _execute_sql(
         return
     try:
         if isinstance(stmt, Begin):
-            tx_mgr.begin()
+            db.begin_transaction()
+            tx_mgr.begin()  # low-level WAL
             out.write("OK\n")
             return
         if isinstance(stmt, Commit):
-            # Use the most recent tx id
             tx_id = getattr(tx_mgr, "_current_tx_id", None)
             if tx_id is not None:
+                db.commit_transaction()
                 tx_mgr.commit(tx_id)
                 out.write("OK\n")
             else:
@@ -108,6 +109,7 @@ def _execute_sql(
         if isinstance(stmt, Rollback):
             tx_id = getattr(tx_mgr, "_current_tx_id", None)
             if tx_id is not None:
+                db.rollback_transaction()
                 tx_mgr.rollback(tx_id)
                 out.write("OK\n")
             else:

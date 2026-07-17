@@ -276,6 +276,9 @@ class Executor:
     def __init__(self, store: storage.FileStore) -> None:
         self._store = store
         self.catalog = Catalog(store)
+        # Transaction state: when set, contains {table_name: [(values, rowid), ...]}
+        # captured at BEGIN time. ROLLBACK restores from this snapshot.
+        self._snapshot: dict[str, list[tuple[tuple, int]]] | None = None
 
     @classmethod
     def open(cls, path: str) -> "Executor":
@@ -284,6 +287,52 @@ class Executor:
 
     def close(self) -> None:
         self._store.close()
+
+    # === Transaction API (v0.1: snapshot-based rollback) ====================
+
+    @property
+    def in_transaction(self) -> bool:
+        return self._snapshot is not None
+
+    def begin_transaction(self) -> None:
+        if self._snapshot is not None:
+            raise tinydb_types.TinyDBError("TransactionAlreadyActive")
+        snap: dict[str, list[tuple[tuple, int]]] = {}
+        for name in self.catalog.all_tables():
+            schema = self.catalog.get_schema(name)
+            if schema is None:
+                continue
+            snap[name] = list(_Heap(self._store, schema).scan())
+        self._snapshot = snap
+
+    def commit_transaction(self) -> None:
+        if self._snapshot is None:
+            raise tinydb_types.TinyDBError("NoActiveTransaction")
+        self._snapshot = None
+
+    def rollback_transaction(self) -> None:
+        if self._snapshot is None:
+            raise tinydb_types.TinyDBError("NoActiveTransaction")
+        for name, rows in self._snapshot.items():
+            schema = self.catalog.get_schema(name)
+            if schema is None:
+                continue
+            # Free all existing heap pages for this table
+            pid = schema.first_data_page_id
+            while pid != 0:
+                page = self._store.read_page(pid)
+                nxt = struct.unpack_from("<I", page.body, 0)[0]
+                self._store.free_page(pid)
+                pid = nxt
+            schema.first_data_page_id = 0
+            self._store.catalog_update(schema)
+            # Rewrite from snapshot
+            if rows:
+                heap = _Heap(self._store, schema)
+                for values, _rowid in rows:
+                    self._validate_row(values, schema)
+                    heap.append_row(values)
+        self._snapshot = None
 
     def execute(self, stmt: object) -> object:
         if isinstance(stmt, p.CreateTable):
