@@ -290,6 +290,10 @@ class Executor:
             return self._exec_create(stmt)
         if isinstance(stmt, p.DropTable):
             return self._exec_drop(stmt)
+        if isinstance(stmt, p.CreateIndex):
+            return self._exec_create_index(stmt)
+        if isinstance(stmt, p.DropIndex):
+            return self._exec_drop_index(stmt)
         if isinstance(stmt, p.Insert):
             return self._exec_insert(stmt)
         if isinstance(stmt, p.Select):
@@ -354,6 +358,54 @@ class Executor:
             except Exception:
                 pass
         self._store.free_page(root_id)
+
+    def _exec_create_index(self, stmt: p.CreateIndex) -> None:
+        schema = self.catalog.get_schema(stmt.table)
+        if schema is None:
+            raise tinydb_types.TableNotFound(stmt.table)
+        # Find the column
+        col_idx = self._col_index(schema, stmt.column)
+        col = schema.columns[col_idx]
+        ct = tinydb_types.ColumnType(col.type_name)
+        if stmt.if_not_exists and stmt.name in schema.indexes:
+            return
+        if stmt.name in schema.indexes:
+            raise tinydb_types.TinyDBError(f"IndexAlreadyExists({stmt.name!r})")
+        # Allocate the B+ tree
+        tree = index.BPlusTree.create(self._store, ct)
+        # Populate the index from existing rows
+        for values, _rowid in _Heap(self._store, schema).scan():
+            key = values[col_idx]
+            if key is None:
+                continue  # NULLs are not indexed
+            tree.insert(key, _rowid)
+        # Persist index reference in catalog
+        schema.indexes[stmt.name] = tree._root
+        self._store.catalog_update(schema)
+        if stmt.unique:
+            # Enforce uniqueness: scan for duplicates
+            seen: set[object] = set()
+            for values, _rowid in _Heap(self._store, schema).scan():
+                key = values[col_idx]
+                if key is None:
+                    continue
+                if key in seen:
+                    self._store.free_page(tree._root)
+                    schema.indexes.pop(stmt.name, None)
+                    self._store.catalog_update(schema)
+                    raise tinydb_types.UniqueViolation("UNIQUE INDEX", key)
+                seen.add(key)
+
+    def _exec_drop_index(self, stmt: p.DropIndex) -> None:
+        # Find the table that owns this index
+        for table_schema in [self.catalog.get_schema(name) for name in self.catalog.all_tables()]:
+            if table_schema and stmt.name in table_schema.indexes:
+                root_id = table_schema.indexes.pop(stmt.name)
+                self._free_subtree(root_id)
+                self._store.catalog_update(table_schema)
+                return
+        if not stmt.if_exists:
+            raise tinydb_types.TinyDBError(f"IndexNotFound({stmt.name!r})")
 
     # === DML ==============================================================
 
