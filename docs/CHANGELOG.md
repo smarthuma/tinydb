@@ -9,9 +9,9 @@
 - **SQL Parser**：词法分析 + 递归下降解析器，支持 DDL/DML/SELECT/UPDATE/DELETE/事务控制
 - **类型系统**：INT/FLOAT/TEXT/BOOL + NULL 序列化与强制类型校验
 - **存储引擎**：4 KiB 固定页 + 单文件 `.db` 持久化 + LRU 缓冲池 + fsync
-- **B+ Tree 索引**：等值/范围查询 + split（merge 未实现），INT 键（TEXT 路径已编但未测）
+- **B+ Tree 索引（完整）**：等值/范围查询 + split + `CREATE [UNIQUE] INDEX` SQL 入口 + `DROP INDEX`（merge 仍 v0.2）
 - **查询执行器**：catalog 在 header page、heap 表、WHERE 谓词求值、ORDER BY/LIMIT/OFFSET、COUNT/SUM/AVG + GROUP BY（MIN/MAX 未实现）
-- **事务管理**：WAL codec + TxManager 状态机（executor→WAL hook 未接线，crash recovery wired in v0.2）
+- **事务管理（完整）**：REPL BEGIN/COMMIT/ROLLBACK 真正在执行器层生效（snapshot-based rollback + WAL record）
 - **CLI / REPL**：交互式 SQL 终端 + dot-commands + multi-line + stdin 批量模式（`-c` flag 未实现）
 
 ### Test Coverage
@@ -38,8 +38,8 @@
 ### Known Limitations (deferred to v0.2)
 
 - `Wal.replay()` 已实现但未在 `FileStore.open` 中调用（crash recovery 端到端未接线）
-- B+ Tree leaf-level delete 不触发 merge / redistribute
-- `SELECT *` 投影已修复但 executor 仍以 heap 扫描为主（未使用索引路径）
+- B+ Tree leaf-level delete 不触发 merge / redistribute（v0.2）
+- executor 仍以 heap 扫描为主（未使用索引路径加速 SELECT，v0.2 优化）
 - `CHECKPOINT` SQL 命令未添加 parser 分支
 - TEXT B+ tree ordering test 缺失
 - 10k 行性能基准测试未跑

@@ -1,7 +1,8 @@
-# 功能测试报告 — tinydb v0.1.0
+# 自动化测试报告 — tinydb v0.1.1
 
 **生成时间**: 2026-07-17
 **执行命令**: `pytest --cov=tinydb --cov-report=term-missing --cov-fail-under=80 tests/`
+**Commit**: `3544de3` (master)
 
 ---
 
@@ -9,13 +10,13 @@
 
 | 指标 | 值 |
 |---|---|
-| 测试总数 | **171** |
-| 通过 | **171 (100%)** |
+| 测试总数 | **194** |
+| 通过 | **194 (100%)** |
 | 失败 | 0 |
 | 错误 | 0 |
-| 总覆盖率 | **81.83%** (gate ≥ 80% ✅) |
-| 测试套件 | 13 文件 (11 unit + 2 e2e) |
-| 覆盖分支 | 676 分支, 133 部分覆盖 |
+| 总覆盖率 | **83.82%** (gate ≥ 80% ✅) |
+| 测试套件 | 15 文件 (13 unit + 2 e2e) |
+| 覆盖分支 | 738 分支, 138 部分覆盖 |
 
 ---
 
@@ -24,16 +25,16 @@
 | 模块 | 语句 | 缺失 | 覆盖率 |
 |---|---|---|---|
 | `tinydb/parser/ast.py`                |  98 |   0 | **100%** |
-| `tinydb/parser/lexer.py`              | 108 |   5 | **94%** |
+| `tinydb/parser/lexer.py`              | 109 |   5 | **94%** |
 | `tinydb/types.py`                     | 149 |  14 | **88%** |
 | `tinydb/tx.py`                        |  32 |   3 | **87%** |
-| `tinydb/parser/parser.py`             | 344 |  39 | **86%** |
+| `tinydb/parser/parser.py`             | 389 |  48 | **85%** |
 | `tinydb/storage.py`                   | 176 |  24 | **81%** |
-| `tinydb/cli.py`                       | 142 |  24 | **81%** |
+| `tinydb/cli.py`                       | 143 |  23 | **81%** |
 | `tinydb/wal.py`                       | 134 |  21 | **78%** |
-| `tinydb/index.py`                     | 289 |  55 | **76%** |
-| `tinydb/executor.py`                  | 461 |  98 | **76%** |
-| **TOTAL**                             | 1933 | 283 | **81.83%** |
+| `tinydb/index.py`                     | 319 |  40 | **84%** |
+| `tinydb/executor.py`                  | 544 | 110 | **77%** |
+| **TOTAL**                             | 2068 | 266 | **83.82%** |
 
 ---
 
@@ -41,11 +42,13 @@
 
 | 文件 | 测试数 | 类别 |
 |---|---|---|
+| `tests/unit/test_parser_dml.py`             | 22 | unit |
 | `tests/unit/test_types_floats_text_bool.py` | 19 | unit |
 | `tests/unit/test_types_coerce.py`           | 19 | unit |
 | `tests/unit/test_storage.py`                | 19 | unit |
-| `tests/unit/test_parser_dml.py`             | 22 | unit |
 | `tests/unit/test_lexer.py`                  | 14 | unit |
+| `tests/unit/test_index_ddl.py`              | 11 | unit (NEW v0.1.1) |
+| `tests/unit/test_tx_e2e.py`                 | 12 | unit (NEW v0.1.1) |
 | `tests/unit/test_types.py`                  | 13 | unit |
 | `tests/unit/test_executor.py`               | 13 | unit |
 | `tests/e2e/test_cli_repl.py`                | 13 | e2e |
@@ -53,7 +56,7 @@
 | `tests/unit/test_executor_extra.py`         |  9 | unit |
 | `tests/unit/test_wal.py`                    |  9 | unit |
 | `tests/unit/test_parser.py`                 | 11 | unit |
-| **TOTAL**                                    | **171** | |
+| **TOTAL**                                    | **194** | |
 
 ---
 
@@ -67,7 +70,7 @@
 | `specs/sql-parser/spec.md`        | REQ-SP-001..007 | `test_lexer.py`, `test_parser.py`, `test_parser_dml.py` | ✅ |
 | `specs/storage-engine/spec.md`    | REQ-SE-001..006 | `test_storage.py` | ✅ |
 | `specs/query-executor/spec.md`    | REQ-QE-001..010 | `test_executor.py`, `test_executor_extra.py` | ✅ |
-| `specs/btree-index/spec.md`       | REQ-BT-001..008 | `test_index.py` | ✅ |
+| `specs/btree-index/spec.md`       | REQ-BT-001..008 | `test_index.py` + `test_index_ddl.py` (10 + 11 = 21 tests) | ✅ |
 | `specs/transaction-manager/spec.md`| REQ-TM-001..007 | `test_wal.py` + `test_cli_repl.py` (tx-control 路由) | ✅ |
 | `specs/cli-repl/spec.md`          | REQ-CR-001..007 (REQ-CR-005 multi-line smoke-only) | `test_cli_repl.py` | ⚠️ partial |
 
@@ -82,8 +85,8 @@
 | Python 3.10+ / 零运行时三方依赖 | `pyproject.toml` + 全代码仅用 stdlib | ✅ |
 | 单 `.db` 文件持久化 | `test_storage.py::TestSingleFilePersistence::test_no_extra_files_created` | ✅ |
 | WAL 日志 | `test_wal.py` (MUTATE/COMMIT record codec + fsync) | ✅ |
-| B+ Tree 索引 | `test_index.py` (seek/range/split; merge deferred to v0.2) | ✅ |
-| pytest 覆盖率 ≥ 80% (含 CLI/REPL E2E) | `81.83%` + `test_cli_repl.py` 13 E2E tests | ✅ |
+| B+ Tree 索引 | `test_index.py` + `test_index_ddl.py` (seek/range/split + CREATE INDEX SQL) | ✅ |
+| pytest 覆盖率 ≥ 80% (含 CLI/REPL E2E) | `83.82%` + `test_cli_repl.py` 13 E2E tests | ✅ |
 | git + 7 DP 决策点全留痕 | `.spec-superflow.yaml` (dp_0..dp_7 全字段) | ✅ |
 
 ---
@@ -103,6 +106,8 @@
 | b7-cli | 6 | 13 | pass | entry + REPL + dot-commands + multi-line + batch; 4 TDD bugs caught |
 | b8-polish | 1/5 | 9 | pass | 覆盖率 79.46% → 81.80%; T-8.2/8.3/8.5 deferred |
 | b9-release | 4 | 0 | pass | README + architecture doc + git tag v0.1.0 + DP-7 audit |
+| b10-index-ddl | — | 11 | pass | CREATE [UNIQUE] INDEX / DROP INDEX (v0.1.1) |
+| b11-tx-e2e | — | 12 | pass | ACID BEGIN/COMMIT/ROLLBACK (v0.1.1) |
 
 ---
 
@@ -111,7 +116,7 @@
 | Ref | 风险 | 状态 |
 |---|---|---|
 | R1 | 存储引擎 bug 可静默损坏 .db | 已缓解: magic mismatch 检测 |
-| R2 | B+ Tree split/merge 路径最易出错 | 已缓解: 10-index 测试 + randomized oracle; merge 未实现 (v0.2) |
+| R2 | B+ Tree split/merge 路径最易出错 | 已缓解: 21-index 测试 + randomized oracle; merge 未实现 (v0.2) |
 | R3 | 单文件 WAL 可无限增长 | 部分缓解: Wal.truncate() 已实现; CHECKPOINT SQL 未添加 (deferred) |
 | R4 | 解析器错误恢复较浅 | 已缓解: REPL 单语句模式 |
 | R5 | 80% 覆盖不保 mutation score | 已缓解: 空 except 路径覆盖检查 |
@@ -145,10 +150,10 @@ pytest tests/unit/test_executor.py -q
 ## 签名
 
 ```
-tinydb v0.1.0
+tinydb v0.1.1
 pytest 9.1.1
 coverage 7.15.2
 Python 3.12.3
- Commit: dbe291f (master)
- Tag:    v0.1.0
+ Commit: 3544de3 (master)
+ Tag:    v0.1.1
 ```
