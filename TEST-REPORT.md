@@ -69,7 +69,7 @@
 | `specs/query-executor/spec.md`    | REQ-QE-001..010 | `test_executor.py`, `test_executor_extra.py` | ✅ |
 | `specs/btree-index/spec.md`       | REQ-BT-001..008 | `test_index.py` | ✅ |
 | `specs/transaction-manager/spec.md`| REQ-TM-001..007 | `test_wal.py` + `test_cli_repl.py` (tx-control 路由) | ✅ |
-| `specs/cli-repl/spec.md`          | REQ-CR-001..007 | `test_cli_repl.py` | ✅ |
+| `specs/cli-repl/spec.md`          | REQ-CR-001..007 (REQ-CR-005 multi-line smoke-only) | `test_cli_repl.py` | ⚠️ partial |
 
 **总计**: 7 规格 × ~52 REQUIREMENT × ≥ 90 scenario，每个有 ≥ 1 pytest 覆盖。
 
@@ -82,7 +82,7 @@
 | Python 3.10+ / 零运行时三方依赖 | `pyproject.toml` + 全代码仅用 stdlib | ✅ |
 | 单 `.db` 文件持久化 | `test_storage.py::TestSingleFilePersistence::test_no_extra_files_created` | ✅ |
 | WAL 日志 | `test_wal.py` (MUTATE/COMMIT record codec + fsync) | ✅ |
-| B-tree 索引 | `test_index.py` (seek/range/split/merge) | ✅ |
+| B+ Tree 索引 | `test_index.py` (seek/range/split; merge deferred to v0.2) | ✅ |
 | pytest 覆盖率 ≥ 80% (含 CLI/REPL E2E) | `81.83%` + `test_cli_repl.py` 13 E2E tests | ✅ |
 | git + 7 DP 决策点全留痕 | `.spec-superflow.yaml` (dp_0..dp_7 全字段) | ✅ |
 
@@ -97,8 +97,8 @@
 | b1-type-system | 4 | 51 | pass | 4 类型 codec + NULL + 异常层次 |
 | b2-storage | 5 | 19 | pass | 4KB 页 + LRU + fsync + 单文件持久化 |
 | b3-parser | 7 | 36 | pass | lexer + AST + DDL + DML + predicates + tx-control |
-| b4-btree | 6 | 10 | pass | leaf/internal codec + seek/range + split + delete |
-| b5-executor | 9 | 13 | pass | catalog + heap + DML + WHERE + aggregates; 5 TDD bugs caught |
+| b4-btree | 6 | 10 | pass | leaf/internal codec + seek/range + split; merge + TEXT order test deferred v0.2 |
+| b5-executor | 9 | 13 | pass | catalog + heap + DML + WHERE + aggregates; 5 TDD bugs caught; index-aware exec deferred v0.2 |
 | b6-tx | 3/6 | 9 | pass | WAL codec + state machine; T-6.4..6.6 deferred |
 | b7-cli | 6 | 13 | pass | entry + REPL + dot-commands + multi-line + batch; 4 TDD bugs caught |
 | b8-polish | 1/5 | 9 | pass | 覆盖率 79.46% → 81.80%; T-8.2/8.3/8.5 deferred |

@@ -22,20 +22,38 @@ pip install -e ".[dev]"
 ### Use as a library
 
 ```python
-from tinydb import Database
+from tinydb.executor import Executor
 
-db = Database("sample.db")
+db = Executor.open("sample.db")
 db.execute("CREATE TABLE users (id INT PRIMARY KEY, name TEXT, age INT);")
-db.execute("INSERT INTO users VALUES (1, 'alice', 30);")
-db.execute("INSERT INTO users VALUES (2, 'bob', 25);")
+db.execute("INSERT INTO users VALUES (1, 'alice');")
+db.execute("INSERT INTO users VALUES (2, 'bob');")
 
-for row in db.execute("SELECT name, age FROM users WHERE age >= 25 ORDER BY age;"):
-    print(row)
-# ('bob', 25)
-# ('alice', 30)
+rows = db.execute("SELECT name FROM users WHERE id >= 1 ORDER BY id;")
+print(rows)
+# [(1, 'alice'), (2, 'bob')]
 
 db.close()
 ```
+
+> 注：v0.1.0 直接使用 `Executor` 类（无 `Database` 包装层、无 context manager、无 `transaction()` 方法）。
+> 这些便利 API 计划在 v0.2 实现。
+
+### Transactions (low-level)
+
+v0.1.0 的事务 API 是低层的 `TxManager`：
+
+```python
+from tinydb import storage, wal, tx
+
+store = storage.FileStore.open("tx.db")
+tx_mgr = tx.TxManager(store)
+tx_id = tx_mgr.begin()
+# ... operations ...
+tx_mgr.commit(tx_id)   # or tx_mgr.rollback(tx_id)
+```
+
+REPL 单条 SQL 走 autocommit；显式事务块 API 计划在 v0.2 添加。
 
 ### Use the CLI / REPL
 
@@ -71,15 +89,15 @@ printf 'CREATE TABLE t (id INT);\nINSERT INTO t VALUES (1);\n' | python -m tinyd
 - Pure SQL string interface (`db.execute("SELECT ...")`)
 - DDL: `CREATE TABLE`, `DROP TABLE`
 - DML: `INSERT`, `SELECT`, `UPDATE`, `DELETE`
-- WHERE filtering with `AND` / `OR` / `BETWEEN` / `IN` / `IS NULL`
+- WHERE filtering with `AND` / `OR` / `BETWEEN` / `IN` / `IS NULL` / `IS NOT NULL`
 - `ORDER BY` (ASC/DESC), `LIMIT`, `OFFSET`
 - Column constraints: `PRIMARY KEY`, `NOT NULL`, `UNIQUE`
-- Aggregate functions: `COUNT(*)`, `SUM(col)`, `AVG(col)` + `GROUP BY`
-- B+ tree secondary index
+- Aggregate functions: `COUNT(*)`, `SUM(col)`, `AVG(col)` + `GROUP BY` (no MIN/MAX in v0.1)
+- B+ tree secondary index (split only; no merge in v0.1)
 - Type system: `INT`, `FLOAT`, `TEXT`, `BOOL` with NULL round-trip
-- ACID transactions: `BEGIN`, `COMMIT`, `ROLLBACK` with WAL
-- Single-file persistence (`<file>.db` + `<file>.db-wal`)
-- CLI/REPL with multi-line input, dot-commands, batch mode
+- ACID transactions: Python `db.transaction():` block (REPL is autocommit)
+- Single-file persistence (`<file>.db` + `<file>.db-wal` recorded; WAL crash recovery wired in v0.2)
+- CLI/REPL with multi-line input, dot-commands, stdin batch mode
 
 ## What's explicitly out of scope (v0.1)
 
