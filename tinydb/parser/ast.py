@@ -95,6 +95,21 @@ class DropTable:
 
 
 @dataclass(frozen=True)
+class CreateIndex:
+    name: str
+    table: str
+    column: str
+    unique: bool = False
+    if_not_exists: bool = False
+
+
+@dataclass(frozen=True)
+class DropIndex:
+    name: str
+    if_exists: bool = False
+
+
+@dataclass(frozen=True)
 class Insert:
     table: str
     values: tuple[tuple[Expr, ...], ...]  # rows of expressions

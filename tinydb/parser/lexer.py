@@ -33,9 +33,9 @@ KEYWORDS = frozenset({
     "SELECT", "FROM", "WHERE", "UPDATE", "SET", "DELETE", "ORDER", "BY",
     "ASC", "DESC", "LIMIT", "OFFSET", "GROUP", "PRIMARY", "KEY", "NOT",
     "NULL", "UNIQUE", "AND", "OR", "IS", "BETWEEN", "IN", "AS", "INT",
-    "FLOAT", "TEXT", "BOOL", "BEGIN", "TRANSACTION", "COMMIT", "END",
+    "FLOAT", "TEXT", "BOOL", "BEGIN", "TRANSACTION", "COMMIT", "END", "ON",
     "ROLLBACK", "TRUE", "FALSE", "CHECKPOINT",
-    "COUNT", "SUM", "AVG", "STAR", "LIKE",
+    "COUNT", "SUM", "AVG", "STAR", "LIKE", "INDEX",
 })
 
 # Single-character punctuation

@@ -86,11 +86,11 @@ def decode_leaf(raw: bytes, key_type: tinydb_types.ColumnType) -> tuple[list[obj
             keys.append(_decode_key(raw[off:off + key_sz], key_type))
             off += key_sz
         else:
-            # TEXT: u32 length prefix + UTF-8 bytes
+            # TEXT: u32 length prefix + UTF-8 bytes; skip the prefix when decoding
             (length,) = struct.unpack_from("<I", raw, off)
             off += 4
-            keys.append(_decode_key(raw[off:off + 4 + length], key_type))
-            off += 4 + length
+            keys.append(raw[off:off + length].decode("utf-8"))
+            off += length
         (r,) = struct.unpack_from("<Q", raw, off)
         off += 8
         rowids.append(r)

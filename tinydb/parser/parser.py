@@ -29,6 +29,8 @@ from tinydb.parser.ast import (
     Rollback,
     Select,
     Update,
+    CreateIndex,
+    DropIndex,
 )
 from tinydb.parser.lexer import Token, TokenType, tokenize
 from tinydb.types import ParseError
@@ -82,13 +84,32 @@ class _Parser:
             return self.advance()
         return None
 
+    def _peek_second_keyword(self) -> str | None:
+        """Look at the next meaningful keyword, skipping UNIQUE (used to
+        disambiguate CREATE [UNIQUE] INDEX vs CREATE TABLE,
+        DROP TABLE vs DROP INDEX)."""
+        for offset in (1, 2):  # CREATE INDEX, CREATE UNIQUE INDEX
+            t = self.peek(offset)
+            if t.type is TokenType.KEYWORD:
+                kw = t.value.upper()
+                if kw == "UNIQUE":
+                    continue  # skip UNIQUE, look at the keyword after it
+                return kw
+        return None
+
     def parse_statement(self) -> object:
         t = self.peek()
         if t.type is TokenType.KEYWORD:
             kw = t.value.upper()
             if kw == "CREATE":
+                # CREATE [UNIQUE] INDEX vs CREATE TABLE
+                if self._peek_second_keyword() == "INDEX":
+                    return self._parse_create_index()
                 return self._parse_create_table()
             if kw == "DROP":
+                # DROP [TABLE | INDEX]
+                if self._peek_second_keyword() == "INDEX":
+                    return self._parse_drop_index()
                 return self._parse_drop_table()
             if kw == "INSERT":
                 return self._parse_insert()
@@ -157,6 +178,34 @@ class _Parser:
             names.append(self._parse_ident())
         self.expect_punct(";")
         return DropTable(names=tuple(names), if_exists=if_exists)
+
+    def _parse_create_index(self) -> CreateIndex:
+        self.expect_keyword("CREATE")
+        unique = self.match_keyword("UNIQUE") is not None
+        self.expect_keyword("INDEX")
+        if_not_exists = self.match_keyword("IF") is not None
+        if if_not_exists:
+            self.expect_keyword("NOT")
+            self.expect_keyword("EXISTS")
+        name = self._parse_ident()
+        self.expect_keyword("ON")
+        table = self._parse_ident()
+        self.expect_punct("(")
+        column = self._parse_ident()
+        self.expect_punct(")")
+        self.expect_punct(";")
+        return CreateIndex(name=name, table=table, column=column,
+                           unique=unique, if_not_exists=if_not_exists)
+
+    def _parse_drop_index(self) -> DropIndex:
+        self.expect_keyword("DROP")
+        self.expect_keyword("INDEX")
+        if_exists = self.match_keyword("IF") is not None
+        if if_exists:
+            self.expect_keyword("EXISTS")
+        name = self._parse_ident()
+        self.expect_punct(";")
+        return DropIndex(name=name, if_exists=if_exists)
 
     # === DML — INSERT / SELECT / UPDATE / DELETE ===========================
 
