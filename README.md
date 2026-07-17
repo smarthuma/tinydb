@@ -23,13 +23,14 @@ pip install -e ".[dev]"
 
 ```python
 from tinydb.executor import Executor
+from tinydb.parser.parser import parse as parse_sql
 
 db = Executor.open("sample.db")
-db.execute("CREATE TABLE users (id INT PRIMARY KEY, name TEXT, age INT);")
-db.execute("INSERT INTO users VALUES (1, 'alice');")
-db.execute("INSERT INTO users VALUES (2, 'bob');")
+db.execute(parse_sql("CREATE TABLE users (id INT PRIMARY KEY, name TEXT);"))
+db.execute(parse_sql("INSERT INTO users VALUES (1, 'alice');"))
+db.execute(parse_sql("INSERT INTO users VALUES (2, 'bob');"))
 
-rows = db.execute("SELECT name FROM users WHERE id >= 1 ORDER BY id;")
+rows = db.execute(parse_sql("SELECT id, name FROM users ORDER BY id;"))
 print(rows)
 # [(1, 'alice'), (2, 'bob')]
 
